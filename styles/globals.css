@@ -1,3 +1,79 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  button:disabled {
+    @apply cursor-not-allowed opacity-50;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    width: 0px;
+  }
+  .scrollbar-style::-webkit-scrollbar,
+  .cm-scroller::-webkit-scrollbar,
+  body::-webkit-scrollbar {
+    width: 5px;
+    height: 8px;
+  }
+  .scrollbar-style::-webkit-scrollbar-track,
+  .cm-scroller::-webkit-scrollbar-track,
+  body::-webkit-scrollbar-track {
+    border-radius: 100rem;
+  }
+  .scrollbar-style::-webkit-scrollbar-thumb,
+  .cm-scroller::-webkit-scrollbar-thumb,
+  body::-webkit-scrollbar-thumb {
+    border-radius: 100rem;
+    background-image: linear-gradient(245deg, #5142d6, #a047c0);
+    @apply bg-slate-600;
+  }
+}
+@layer utilities {
+  .bg-grid {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(148 163 184 / 0.05)'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
+    -webkit-mask-image: linear-gradient(180deg, transparent, #000);
+  }
+  .bg-gradient-primary {
+    background-image: linear-gradient(to right top, #5142d6, #a047c0);
+  }
+  .bg-gradient-secondary {
+    background-image: linear-gradient(to right top, #fc6c8f, #ffb86c);
+  }
+  .button-effect {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+  .button-effect:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: auto;
+    top: 0;
+    height: 100%;
+    width: 0;
+    background-color: white;
+    opacity: 0.1;
+    z-index: -1;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+  .button-effect:hover:before {
+    left: auto;
+    right: 0;
+    width: 100%;
+  }
+  .pointer-effect {
+    animation: pointer 1s infinite cubic-bezier(0.075, 0.82, 0.165, 1);
+  }
+  .ReactModal__Body--open {
+    overflow: hidden;
+  }
+  .wrapper-code {
+    @apply rounded-lg border border-slate-700;
+  }
+  @keyframes pointer {
+    100% {
+      transform: scale(0.75);
+    }
+  }
+}

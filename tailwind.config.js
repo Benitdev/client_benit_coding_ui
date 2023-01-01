@@ -1,9 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'class',
   content: [
     './app/**/*.{js,ts,jsx,tsx}',
     './page/**/*.{js,ts,jsx,tsx}',
-    './ui/**/*.{js,ts,jsx,tsx}',
+    './components/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     extend: {
@@ -16,6 +17,7 @@ module.exports = {
           orange: '#F5A623',
           violet: '#7928CA',
         },
+        primary: '#9847e9',
       },
       keyframes: ({ theme }) => ({
         rerender: {

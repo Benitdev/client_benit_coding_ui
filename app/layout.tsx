@@ -1,7 +1,7 @@
 import '@/styles/globals.css';
-import React from 'react';
-import AddressBar from '@/ui/AddressBar';
-import GlobalNav from './GlobalNav';
+import 'react-toastify/dist/ReactToastify.css';
+import ToastContainerWrapper from '@/components/providers/ToastContainer';
+import ReduxWrapper from '@/components/providers/ReduxWrapper';
 
 export default function RootLayout({
   children,
@@ -9,49 +9,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html>
-      <head>
-        <title>Next.js Turbopack App Directory Playground</title>
-      </head>
-      <body className="overflow-y-scroll bg-zinc-900">
-        <div className="grid grid-cols-[1fr,minmax(auto,240px),min(800px,100%),1fr] gap-x-8 py-8">
-          <div className="col-start-2">
-            <GlobalNav />
-          </div>
-
-          <div className="col-start-3 space-y-6">
-            <AddressBar />
-
-            <div className="rounded-xl border border-zinc-800 bg-black p-8">
-              {children}
-            </div>
-          </div>
-
-          <div className="col-start-3 col-end-4 mt-28 flex items-center justify-center">
-            <div className="text-sm text-zinc-600">
-              Created by the <b>Next.js</b>
-              {' team at '}
-              <a href="https://vercel.com">
-                <b>Vercel</b>
-              </a>
-              {'. '}
-              <a
-                className="underline decoration-dotted underline-offset-4"
-                href="https://github.com/vercel/next.js/examples/with-turbopack"
-              >
-                View the code
-              </a>
-              {' or '}
-              <a
-                className="underline decoration-dotted underline-offset-4"
-                href="https://vercel.com/templates/next.js"
-              >
-                deploy your own
-              </a>
-              {'.'}
-            </div>
-          </div>
-        </div>
+    <html className="dark">
+      <head />
+      <body className="bg-white text-slate-900 antialiased dark:bg-black dark:text-slate-100">
+        <ReduxWrapper>{children}</ReduxWrapper>
+        <div className="fixed top-[15%] left-11 -z-10 h-32 w-[50rem] -rotate-45 bg-pink-600/60 bg-gradient-to-tr blur-[200px]"></div>
+        <div className="fixed bottom-[15%] right-11 -z-10 h-24 w-[40rem] rotate-45 bg-purple-600/60 bg-gradient-to-tr blur-[120px]"></div>
+        <div className="bg-grid fixed inset-0 -z-10"></div>
+        <ToastContainerWrapper />
       </body>
     </html>
   );
