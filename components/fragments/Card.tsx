@@ -27,6 +27,8 @@ type Props = {
 };
 
 const Card = (props: Props) => {
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+
   const {
     title,
     htmlCode,
@@ -38,6 +40,12 @@ const Card = (props: Props) => {
   const dispatch = useAppDispatch();
   const [htmlSourceCode, setHtmlSourceCode] = useState(htmlCode);
   const [cssSourceCode, setCssSourceCode] = useState(cssCode);
+  useEffect(() => {
+    setTimeout(() => {
+      iframeRef.current!.style.height =
+        iframeRef.current?.contentDocument?.body?.offsetHeight + 'px';
+    }, 300);
+  }, [htmlSourceCode, cssSourceCode]);
 
   useEffect(() => {
     setHtmlSourceCode(htmlCode);
@@ -81,9 +89,25 @@ const Card = (props: Props) => {
             </div>
           )}
         </div>
-        <div id="card-preview" className="min-h-[150px] py-10">
-          {preview && cssSourceCode && <style>{cssSourceCode}</style>}
-          {preview && htmlSourceCode && <>{parse(htmlSourceCode)}</>}
+        <div className="py-10">
+          <iframe
+            srcDoc={`<style>
+              body::-webkit-scrollbar {
+              width: 5px;
+              height: 5px;
+              }
+              body::-webkit-scrollbar-track {
+                border-radius: 100rem;
+              }
+              body::-webkit-scrollbar-thumb {
+                border-radius: 100rem;
+                background-image: linear-gradient(245deg, #5142d6, #a047c0);
+              }
+              ${cssSourceCode}</style>${htmlSourceCode}`}
+            id="card-preview"
+            className="min-h-[200px] w-full"
+            ref={iframeRef}
+          />
         </div>
         <div className="card-footer relative z-10 mt-auto flex items-center justify-between gap-x-2">
           <h3 className="card-title max-w-[100px] overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold text-white lg:max-w-[150px]">

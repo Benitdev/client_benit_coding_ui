@@ -14,18 +14,19 @@ import InputCard from '@/components/common/input/InputCard';
 import Label from '@/components/common/label/Label';
 import Button from '@/components/common/button/Button';
 import CodeEditorBlock from '@/components/common/input/InputCode';
+import cardApi from 'api/cardApi';
 
-const CardAddNew = ({ setIsShowAddNew }: any) => {
+const CardAddNew = ({ setIsShowAddNew, user }: any) => {
   const [filterList, setFilterList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [values, setValues] = useState({
     title: '',
-    filter: '',
+    filter: '1',
     htmlCode: '',
     cssCode: '',
     author: '',
   });
-  const handleAddNewCard = (e: any) => {
+  const handleAddNewCard = async (e: any) => {
     e.preventDefault();
     /*  if (userInfo?.status === userStatus.INACTIVE) {
       toast.warning("Your account is not active, please contact admin");
@@ -40,8 +41,27 @@ const CardAddNew = ({ setIsShowAddNew }: any) => {
       return;
     }
     setLoading(true);
-
-    setLoading(false);
+    try {
+      const card = await cardApi.addCard({
+        user_id: user.id,
+        filter_id: 1,
+        title: newValues.title,
+        html_code: newValues.htmlCode,
+        css_code: newValues.cssCode,
+        credit: newValues.author,
+      });
+      toast.success('Thêm Card Thành Công!');
+      setValues({
+        title: '',
+        filter: '1',
+        htmlCode: '',
+        cssCode: '',
+        author: '',
+      });
+      setLoading(false);
+    } catch (e) {
+      setLoading(false);
+    }
   };
 
   const { onChange } = useInputChange(values, setValues);

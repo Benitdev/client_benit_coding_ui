@@ -1,5 +1,4 @@
 import Header from '@/components/fragments/Header';
-
 import useAuth from 'hooks/useAuth';
 
 export const dynamic = 'force-dynamic';

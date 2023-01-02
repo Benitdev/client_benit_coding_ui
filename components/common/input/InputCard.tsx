@@ -1,9 +1,9 @@
 import clsx from 'clsx';
-import React from 'react';
+import { useState } from 'react';
 
 const InputCard = (props: any) => {
   const { type = 'text', className = '', ...rest } = props;
-  const [inputType, setInputType] = React.useState(type);
+  const [inputType, setInputType] = useState(type);
   function togglePassword() {
     setInputType(inputType === 'password' ? 'text' : 'password');
   }
@@ -13,7 +13,7 @@ const InputCard = (props: any) => {
         autoComplete="off"
         type={inputType}
         className={clsx(
-          'w-full rounded-lg border border-slate-700 bg-transparent p-4 text-base text-white outline-none transition-all focus:border-primary',
+          'w-full rounded-lg border border-slate-700 bg-transparent p-4 text-base text-white outline-none transition-all valid:border-primary focus:border-primary',
           className,
         )}
         {...rest}

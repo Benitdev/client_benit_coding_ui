@@ -17,7 +17,7 @@ type Props = {
 };
 const CardAction = ({ children, values, setIsShowAddNew }: Props) => {
   return (
-    <div className="w-[90%] max-w-[1200px] rounded-xl bg-gray-900/70 p-8 backdrop-blur-md">
+    <div className="relative w-[90%] max-w-[1200px] rounded-xl bg-gray-900/70 p-8">
       <FontAwesomeIcon
         icon={faClose}
         className="absolute top-4 right-4 h-8 w-8 cursor-pointer text-gray-300 hover:text-primary"
