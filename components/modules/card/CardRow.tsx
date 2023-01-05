@@ -1,5 +1,11 @@
 'use client';
 
+import ReactTimeAgo from 'react-time-ago';
+import TimeAgo from 'javascript-time-ago';
+
+import en from 'javascript-time-ago/locale/en.json';
+import ru from 'javascript-time-ago/locale/ru.json';
+
 import ButtonAction from '@/components/common/button/ButtonAction';
 import { IconEdit, IconTrash } from '@/components/common/icons';
 import IconQuestion from '@/components/common/icons/IconQuestion';
@@ -7,16 +13,19 @@ import LabelStatus from '@/components/common/label/LabelStatus';
 import { cardStatus, userRole } from 'constant/global-constant';
 import useAuth from 'hooks/useAuth';
 import Link from 'next/link';
+import CardPreview from './CardPreview';
 
-const CardRow = ({ card }: any) => {
+TimeAgo.addDefaultLocale(en);
+TimeAgo.addLocale(ru);
+
+const CardRow = ({ card, setIsShowAddNew, setCardEditting }: any) => {
   const user: any = {};
-  const renderStatus = (status: number) => {
+  const renderStatus = (status: string) => {
     switch (status) {
       case cardStatus.APPROVED:
         return <LabelStatus className="bg-green-500">Approved</LabelStatus>;
       case cardStatus.PENDING:
         return <LabelStatus className="bg-orange-500">Pending</LabelStatus>;
-
       default:
         return <LabelStatus className="bg-red-500">Rejected</LabelStatus>;
     }
@@ -39,39 +48,50 @@ const CardRow = ({ card }: any) => {
     setReason(reason);
   }; */
   return (
-    <tr>
+    <div className="row-item grid grid-cols-11 rounded-xl bg-gray-900/70">
       {/* <td>
           <Checkbox></Checkbox>
         </td> */}
-      <td>
-        <Link href={`/manage/update-card?id=${card.id}`} className="text-white">
-          {card.title}
-        </Link>
-      </td>
-      <td className="capitalize">{card.filter}</td>
-      <td>{renderStatus(card.status)}</td>
-      <td>{new Date(card.created_at).toLocaleDateString('vi-VI')}</td>
-      <td>
+      <div className="col-span-2 !text-left">{card.title}</div>
+      <div className="capitalize">{card.filter_name}</div>
+      <div>{renderStatus(card.status)}</div>
+      <div>
+        {/* {new Date(card.created_at).toLocaleDateString('vi-VI')} */}
+        <ReactTimeAgo date={card.created_at} locale="en-US" />
+      </div>
+      <div className="col-span-2">
         <div className="flex flex-col gap-1">
           <p>{card.userFullname || 'Admin'}</p>
           <p className="text-sm text-slate-500">{card.userEmailAddress}</p>
         </div>
-      </td>
-      <td>
+      </div>
+      <div className="col-span-2">
+        <CardPreview
+          htmlCode={card.html_code}
+          cssCode={card.css_code}
+          jsCode={card.js_code}
+          className="h-[150px] w-full border border-slate-200/10"
+        />
+      </div>
+      <div className="col-span-2 flex justify-center">
         <div className="flex items-center gap-x-5">
           <ButtonAction
-            className="hover:border-slate-400text-slate-400 hover:text-slate-400"
+            className="hover:border-yellow-400 hover:text-yellow-400"
             // onClick={() => handleShowReason(card.reason || '')}
           >
             <IconQuestion />
           </ButtonAction>
-          <Link href={`/manage/update-card?id=${card.id}`}>
-            <ButtonAction className="hover:border-blue-500 hover:text-blue-500">
-              <IconEdit></IconEdit>
-            </ButtonAction>
-          </Link>
+          <ButtonAction
+            className="hover:border-blue-500 hover:text-blue-500"
+            onClick={() => {
+              setIsShowAddNew(true);
+              setCardEditting(card);
+            }}
+          >
+            <IconEdit></IconEdit>
+          </ButtonAction>
 
-          {user?.role === userRole.ADMIN && (
+          {user?.role !== userRole.ADMIN && (
             <ButtonAction
               className="hover:border-red-500 hover:text-red-500"
               //   onClick={() => handleDeleteCard(card.id)}
@@ -80,8 +100,8 @@ const CardRow = ({ card }: any) => {
             </ButtonAction>
           )}
         </div>
-      </td>
-    </tr>
+      </div>
+    </div>
   );
 };
 

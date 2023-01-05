@@ -1,6 +1,6 @@
 import React from 'react';
 import ButtonBack from '../common/button/ButtonBack';
-import UserInfo from '../common/combo-box/UserInfo';
+import UserInfo from '../common/dropdown/UserInfo';
 
 type Props = {
   back?: string;

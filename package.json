@@ -16,6 +16,7 @@
   "dependencies": {
     "@codemirror/lang-css": "6.0.1",
     "@codemirror/lang-html": "6.4.0",
+    "@codemirror/lang-javascript": "6.1.2",
     "@fortawesome/free-solid-svg-icons": "6.2.1",
     "@fortawesome/react-fontawesome": "0.2.0",
     "@lezer/highlight": "1.1.3",
@@ -31,6 +32,7 @@
     "cssbeautify": "0.3.1",
     "framer-motion": "8.0.2",
     "html-react-parser": "3.0.6",
+    "javascript-time-ago": "2.5.9",
     "next": "latest",
     "next-themes": "0.2.1",
     "pretty": "2.0.0",
@@ -39,6 +41,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "7.41.2",
     "react-redux": "8.0.5",
+    "react-time-ago": "7.2.1",
     "react-toastify": "9.1.1",
     "styled-components": "5.3.6"
   },

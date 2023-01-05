@@ -11,8 +11,8 @@ export const SkeletonCard = ({
 }) => {
   return (
     <div
-      className={clsx(' rounded-2xl bg-gray-900/80 p-4', className, {
-        'relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/30 before:to-transparent':
+      className={clsx('rounded-2xl bg-gray-900/80 p-4', className, {
+        'relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/30 before:to-transparent':
           isLoading,
       })}
     >

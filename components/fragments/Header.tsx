@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Avatar from './Avatar';
 import Tippy from '@tippyjs/react/headless';
 import { useState } from 'react';
-import UserInfo from '../common/combo-box/UserInfo';
+import UserInfo from '../common/dropdown/UserInfo';
 
 type Props = {
   user?: any;

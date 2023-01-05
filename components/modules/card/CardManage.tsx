@@ -9,59 +9,172 @@ import cardApi from 'api/cardApi';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import clsx from 'clsx';
+import Input from '@/components/common/input/Input';
+import InputCard from '@/components/common/input/InputCard';
+import Button from '@/components/common/button/Button';
+import { useDebounce } from 'hooks';
+import CardFilter from '@/components/common/dropdown/CardFilter';
+import Status from '@/components/common/dropdown/Status';
+
 type Props = any;
 
-const page = ({ user }: Props) => {
+const CardManage = ({ user }: Props) => {
+  const [filter, setFilter] = useState<any>({});
+  const [name, setName] = useState('');
+  const [status, setStatus] = useState('');
+  const [page, setPage] = useState<number>(1);
+  const nameDebounce = useDebounce(name, 500);
+
   const [isShowAddNew, setIsShowAddNew] = useState<boolean>(false);
-  const handleOnClick = () => {
-    setIsShowAddNew(!isShowAddNew);
-  };
+  const [cardEditting, setCardEditting] = useState(null);
   const { data, isLoading } = useQuery({
-    queryKey: ['cards'],
-    queryFn: cardApi.getCard,
+    queryKey: [
+      'cards',
+      { page, title: nameDebounce, filter_id: filter.id, status },
+    ],
+    queryFn: cardApi.getCardList,
+    keepPreviousData: true,
   });
-  console.log(data);
+  const handleFilterByTitle = (e: any) => {
+    setName(e.target.value);
+  };
+  const resetSearch = () => {
+    setName('');
+    setStatus('');
+    setFilter({});
+  };
+  const pageLength = data?.cards.last_page > 5 ? 5 : data?.cards.last_page;
   return (
     <>
+      <div className="mb-10 grid grid-cols-1 flex-wrap gap-5 lg:flex lg:justify-end">
+        <div className="w-full lg:w-[200px]">
+          <InputCard
+            name="filter"
+            placeholder="Search by title"
+            onChange={handleFilterByTitle}
+          ></InputCard>
+        </div>
+        <div className="w-full lg:w-[200px]">
+          <CardFilter value={filter} setValue={setFilter} />
+        </div>
+        <div className="w-full lg:w-[200px]">
+          <Status value={status} setValue={setStatus} />
+        </div>
+        <Button
+          onClick={resetSearch}
+          className="button-effect h-full w-full !bg-slate-700 p-2 lg:w-auto"
+        >
+          Clear filter
+        </Button>
+      </div>
       <div className="flex-1">
-        <div className="h-full rounded-xl bg-gray-900/70 px-4 py-3">
-          {/* <SkeletonCard type={'card-row'} className="h-16" /> */}
+        <div className="relative h-full rounded-xl bg-black/70 px-4 py-3">
+          <div className="table">
+            <ul>
+              <li className="col-span-2">Title</li>
+              <li>Filter</li>
+              <li>Status</li>
+              <li className="">CreatedAt</li>
+              <li className="col-span-2">Author</li>
+              <li className="col-span-2">Preview</li>
+              <li className="col-span-2 !text-center">Actions</li>
+            </ul>
 
-          {isLoading ? (
-            <div className="space-y-6 ">
-              {Array.from({ length: 6 }, (_, index: any) => (
-                <SkeletonCard key={index} type={'card-row'} className="h-16" />
-              ))}
+            <div className="space-y-3">
+              {isLoading ? (
+                Array(3)
+                  .fill(0)
+                  .map((_, index: any) => (
+                    <SkeletonCard
+                      key={index}
+                      type={'card-row'}
+                      className="h-[174px]"
+                    />
+                  ))
+              ) : (
+                <>
+                  {data?.cards.data.length === 0 && (
+                    <tr>
+                      <td colSpan={7}>No data</td>
+                    </tr>
+                  )}
+                  {data?.cards.data.length > 0 &&
+                    data?.cards.data.map((card: any) => (
+                      <CardRow
+                        key={card.id}
+                        card={card}
+                        setIsShowAddNew={setIsShowAddNew}
+                        setCardEditting={setCardEditting}
+                      ></CardRow>
+                    ))}
+                </>
+              )}
             </div>
-          ) : (
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>Title</th>
-                  <th>Filter</th>
-                  <th>Status</th>
-                  <th>CreatedAt</th>
-                  <th>Author</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
+          </div>
 
-              <tbody>
-                {data?.cards.length === 0 && (
-                  <tr>
-                    <td colSpan={7}>No data</td>
-                  </tr>
-                )}
-                {data?.cards.length > 0 &&
-                  data?.cards.map((card: any) => (
-                    <CardRow key={card.id} card={card}></CardRow>
-                  ))}
-              </tbody>
-            </table>
-          )}
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-xl bg-black/70 px-3 py-1">
+            <div className="flex items-center gap-2 text-gray-400">
+              <button disabled={page === 1} onClick={() => setPage(page - 1)}>
+                <FontAwesomeIcon
+                  icon={faArrowLeft}
+                  className={clsx('h-4 w-4', {
+                    'text-white': page !== 1,
+                  })}
+                />
+              </button>
+              {page > 4 ? (
+                <>
+                  <button onClick={() => setPage(1)}>1</button>
+                  <span>...</span>
+                </>
+              ) : null}
+              {Array.from({ length: 5 }, (_, index: any) => {
+                const pageIndex = page - 2 + index;
+
+                if (pageIndex > 0 && pageIndex <= pageLength)
+                  return (
+                    <button
+                      className={clsx({
+                        'text-white underline': pageIndex == page,
+                      })}
+                      key={index}
+                      onClick={() => setPage(pageIndex)}
+                    >
+                      {pageIndex}
+                    </button>
+                  );
+              })}
+              {page < pageLength - 3 ? (
+                <>
+                  <span>...</span>
+                  <button onClick={() => setPage(pageLength)}>
+                    {pageLength}
+                  </button>
+                </>
+              ) : null}
+              <button
+                disabled={page === pageLength}
+                onClick={() => setPage(page + 1)}
+              >
+                <FontAwesomeIcon
+                  icon={faArrowRight}
+                  className={clsx('h-4 w-4', {
+                    'text-white': page !== pageLength,
+                  })}
+                />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-      <ButtonAddNew handleOnClick={handleOnClick} />
+      <ButtonAddNew
+        handleOnClick={() => {
+          setIsShowAddNew(true);
+        }}
+      />
       <AnimatePresence>
         {isShowAddNew ? (
           <motion.div
@@ -74,9 +187,13 @@ const page = ({ user }: Props) => {
             exit={{
               opacity: 0,
             }}
-            className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+            className="fixed inset-0 flex items-center justify-center bg-black/70 backdrop-blur-xl"
           >
-            <CardAddNew setIsShowAddNew={setIsShowAddNew} user={user} />
+            <CardAddNew
+              setIsShowAddNew={setIsShowAddNew}
+              user={user}
+              card={cardEditting}
+            />
           </motion.div>
         ) : null}
       </AnimatePresence>
@@ -84,4 +201,4 @@ const page = ({ user }: Props) => {
   );
 };
 
-export default page;
+export default CardManage;

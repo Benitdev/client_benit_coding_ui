@@ -9,7 +9,7 @@ const Sidebar = () => {
   return (
     <div
       aria-label="sidebar"
-      className="relative hidden border-r border-black/30 bg-black/30 p-5 shadow-lg shadow-black backdrop-blur-2xl lg:block"
+      className="relative hidden border-r border-black/50 bg-black/70 p-5 shadow-lg shadow-black xl:block"
     >
       <Logo />
       <ul className="flex flex-col gap-y-2">

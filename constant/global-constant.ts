@@ -32,9 +32,9 @@ export const menus = [
   },
 ];
 export const cardStatus = {
-  APPROVED: 1,
-  PENDING: 2,
-  REJECTED: 3,
+  APPROVED: 'approved',
+  PENDING: 'pending',
+  REJECTED: 'rejected',
 };
 export const filterStatus = {
   APPROVED: true,

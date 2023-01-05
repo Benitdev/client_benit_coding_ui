@@ -13,6 +13,7 @@ import {
   setHtmlCode,
 } from 'redux/slices/modalSlice';
 import { useAppDispatch } from 'hooks';
+import CardPreview from '../modules/card/CardPreview';
 const CardStyles = styled.div`
   ${(props: any) => props.style}
 `;
@@ -20,44 +21,38 @@ const CardStyles = styled.div`
 type Props = {
   title: string;
   htmlCode: string;
-  cssCode: any;
-  filter: string;
+  cssCode: string;
+  jsCode?: string;
   author?: string;
   preview?: boolean;
 };
 
 const Card = (props: Props) => {
-  const iframeRef = useRef<HTMLIFrameElement>(null);
-
   const {
     title,
     htmlCode,
     cssCode,
-    filter,
+    jsCode = '',
     author = null,
     preview = false,
   } = props;
   const dispatch = useAppDispatch();
-  const [htmlSourceCode, setHtmlSourceCode] = useState(htmlCode);
+  /*   const [htmlSourceCode, setHtmlSourceCode] = useState(htmlCode);
   const [cssSourceCode, setCssSourceCode] = useState(cssCode);
-  useEffect(() => {
-    setTimeout(() => {
-      iframeRef.current!.style.height =
-        iframeRef.current?.contentDocument?.body?.offsetHeight + 'px';
-    }, 300);
-  }, [htmlSourceCode, cssSourceCode]);
+  const [jsSourceCode, setJsSourceCode] = useState(jsCode);
 
-  useEffect(() => {
+    useEffect(() => {
     setHtmlSourceCode(htmlCode);
     setCssSourceCode(cssCode);
+    setJsSourceCode(jsCode);
   }, [htmlCode, cssCode, preview]);
-
+ */
   const handleViewCode = () => {
     dispatch(setIsShowCode(true));
-    dispatch(setHtmlCode(pretty(htmlSourceCode, { ocd: true })));
+    dispatch(setHtmlCode(pretty(htmlCode, { ocd: true })));
     dispatch(
       setCssCode(
-        cssbeautify(cssSourceCode, {
+        cssbeautify(cssCode, {
           indent: `  `,
           autosemicolon: true,
         }),
@@ -66,10 +61,7 @@ const Card = (props: Props) => {
   };
   return (
     <>
-      <div
-        data-filter={filter}
-        className="card relative flex flex-col rounded border border-slate-800 p-5 transition-all hover:border-slate-600"
-      >
+      <div className="card relative flex h-[400px] flex-col rounded border border-slate-800 p-5 transition-all hover:border-slate-600">
         <div className="flex items-center justify-between">
           <h4 className="relative z-10 flex items-center gap-x-2 text-sm font-normal text-slate-500">
             {author && (
@@ -89,25 +81,8 @@ const Card = (props: Props) => {
             </div>
           )}
         </div>
-        <div className="py-10">
-          <iframe
-            srcDoc={`<style>
-              body::-webkit-scrollbar {
-              width: 5px;
-              height: 5px;
-              }
-              body::-webkit-scrollbar-track {
-                border-radius: 100rem;
-              }
-              body::-webkit-scrollbar-thumb {
-                border-radius: 100rem;
-                background-image: linear-gradient(245deg, #5142d6, #a047c0);
-              }
-              ${cssSourceCode}</style>${htmlSourceCode}`}
-            id="card-preview"
-            className="min-h-[200px] w-full"
-            ref={iframeRef}
-          />
+        <div className="flex-1 py-5">
+          <CardPreview htmlCode={htmlCode} cssCode={cssCode} jsCode={jsCode} />
         </div>
         <div className="card-footer relative z-10 mt-auto flex items-center justify-between gap-x-2">
           <h3 className="card-title max-w-[100px] overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold text-white lg:max-w-[150px]">
@@ -122,7 +97,7 @@ const Card = (props: Props) => {
                 type="css"
                 onClick={() =>
                   copyToClipBoard(
-                    cssbeautify(cssSourceCode, {
+                    cssbeautify(cssCode, {
                       indent: `  `,
                       autosemicolon: true,
                     }),
@@ -133,9 +108,7 @@ const Card = (props: Props) => {
               </ButtonCopy>
               <ButtonCopy
                 type="html"
-                onClick={() =>
-                  copyToClipBoard(pretty(htmlSourceCode, { ocd: true }))
-                }
+                onClick={() => copyToClipBoard(pretty(htmlCode, { ocd: true }))}
               >
                 HTML
               </ButtonCopy>
