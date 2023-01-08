@@ -1,37 +1,47 @@
 'use client';
 
+import InputCard from '@/components/common/input/InputCard';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 
-const FilterMenu = ({ setFilter, filterList }: any) => {
+const FilterMenu = ({ setFilter, filterList, setTitle }: any) => {
   const [activeCard, setActiveCard] = useState('all');
-  console.log('cc');
   return (
-    <div
-      className="hidden-scroll scrollbar-style mb-10 flex gap-x-7 overflow-x-auto whitespace-nowrap border-b border-b-slate-800 text-xl font-bold"
-      aria-label="tab-v4"
-    >
-      <FilterItem
-        item={{
-          filter_name: 'all',
-        }}
-        onClick={() => {
-          setActiveCard('all');
-          setFilter({});
-        }}
-        activeCard={activeCard === 'all'}
-      ></FilterItem>
-      {filterList.map((item: any) => (
+    <div className="mb-10 flex items-center justify-between border-b border-b-slate-800 ">
+      <div
+        className="hidden-scroll scrollbar-style flex gap-x-7 overflow-x-auto whitespace-nowrap text-xl font-bold"
+        aria-label="tab-v4"
+      >
         <FilterItem
-          key={item.id}
-          onClick={() => {
-            setActiveCard(item.filter_name);
-            setFilter(item);
+          item={{
+            filter_name: 'all',
           }}
-          activeCard={activeCard === item.filter_name}
-          item={item}
+          onClick={() => {
+            setActiveCard('all');
+            setFilter({});
+          }}
+          activeCard={activeCard === 'all'}
         ></FilterItem>
-      ))}
+        {filterList.map((item: any) => (
+          <FilterItem
+            key={item.id}
+            onClick={() => {
+              setActiveCard(item.filter_name);
+              setFilter(item);
+            }}
+            activeCard={activeCard === item.filter_name}
+            item={item}
+          ></FilterItem>
+        ))}
+      </div>
+      <div>
+        <InputCard
+          name="filter"
+          placeholder="Search by title"
+          className="!p-2"
+          onChange={(e: any) => setTitle(e.target.value)}
+        ></InputCard>
+      </div>
     </div>
   );
 };

@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
-import Input from '../common/input/Input';
-import useDebounce from '../../hooks/useDebounce';
+import useDebounce from '@/hooks/useDebounce';
+import Input from '../input/Input';
 // import { signIn } from 'next-auth/react'
 
 const RegisterForm = () => {
@@ -186,6 +186,11 @@ const RegisterForm = () => {
         {' '}
         Đăng Kí{' '}
       </button>
+      <div className="flex w-[300px] items-center gap-1 text-gray-500">
+        <div className="h-[1px] flex-1 bg-gray-500"></div>
+        <small>Hoặc</small>
+        <div className="h-[1px] flex-1 bg-gray-500"></div>
+      </div>
     </form>
   );
 };

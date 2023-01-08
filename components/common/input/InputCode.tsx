@@ -3,17 +3,30 @@ import { html } from '@codemirror/lang-html';
 import { css } from '@codemirror/lang-css';
 import { javascript } from '@codemirror/lang-javascript';
 import { dracula } from '@uiw/codemirror-theme-dracula';
+import pretty from 'pretty';
+import cssBeautify from 'cssbeautify';
+import jsBeautify from 'js-beautify';
 
 type Props = {
   language: 'css' | 'html' | 'javascript';
   name: string;
   code: string;
-  setValue: any;
+  setValue?: any;
   height?: string;
   showTitle?: boolean;
+  placeholder?: string;
 };
 function CodeEditorBlock(props: Props) {
-  const { language = 'html', name, code, setValue, height, showTitle } = props;
+  const {
+    language = 'html',
+    name,
+    code,
+    setValue,
+    height,
+    showTitle,
+    placeholder,
+  } = props;
+
   const onChange = (code: string) => {
     setValue((prev: any) => {
       return {
@@ -31,8 +44,41 @@ function CodeEditorBlock(props: Props) {
     if (language == 'javascript') return javascript({ typescript: true });
     return css();
   };
+  const handleFormat = () => {
+    switch (language) {
+      case 'html':
+        setValue((prev: any) => {
+          return {
+            ...prev,
+            [name]: pretty(prev[name] ?? '', {
+              ocd: true,
+            }),
+          };
+        });
+        return;
+      case 'css':
+        setValue((prev: any) => {
+          return {
+            ...prev,
+            [name]: cssBeautify(prev[name] ?? '', {
+              indent: `  `,
+              autosemicolon: true,
+            }),
+          };
+        });
+        return;
+      case 'javascript':
+        setValue((prev: any) => {
+          return {
+            ...prev,
+            [name]: jsBeautify(prev[name] ?? '', {}),
+          };
+        });
+        return;
+    }
+  };
   return (
-    <div className="wrapper-code flex w-full flex-col overflow-x-auto">
+    <div className="wrapper-code relative flex w-full flex-col overflow-x-auto">
       {showTitle && (
         <h1
           className={`p-4 text-xl font-bold capitalize ${
@@ -54,7 +100,14 @@ function CodeEditorBlock(props: Props) {
         theme={dracula}
         extensions={[setLanguage()]}
         onChange={onChange}
+        placeholder={placeholder}
       />
+      <div
+        className="absolute bottom-1 right-1 cursor-pointer rounded-lg bg-slate-900 p-2 text-[10px]"
+        onClick={handleFormat}
+      >
+        Format
+      </div>
     </div>
   );
 }

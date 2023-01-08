@@ -34,7 +34,7 @@ const CardFilter = ({ value, setValue }: any) => {
             )}
             {data?.filterList.map((item: any) => (
               <div
-                key={item.filter_name}
+                key={item.id}
                 className={clsx(
                   'cursor-pointer rounded p-3 capitalize hover:bg-white/20 hover:text-pink-500',
                   {
@@ -55,7 +55,7 @@ const CardFilter = ({ value, setValue }: any) => {
       >
         <div
           className={clsx(
-            'flex w-full cursor-pointer items-start rounded-lg border bg-transparent p-4 text-base  outline-none transition-all focus:border-primary',
+            'flex w-full cursor-pointer items-start rounded-lg border bg-transparent p-4 text-base  capitalize outline-none transition-all focus:border-primary',
             {
               'border-primary text-white': value.filter_name != 'Select Filter',
               'border-slate-700 text-gray-400':

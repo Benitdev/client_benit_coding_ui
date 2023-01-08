@@ -5,13 +5,15 @@ import { motion, AnimatePresence, animate } from 'framer-motion';
 
 // import { getProviders, signIn } from 'next-auth/react'
 
-import LoginForm from './LoginForm';
-import RegisterForm from './RegisterForm';
+import LoginForm from '../common/form/LoginForm';
+
 import clsx from 'clsx';
+import RegisterForm from '../common/form/RegisterForm';
+import { useRouter } from 'next/navigation';
 
 const SignIn = ({ error }: any) => {
   const [showLoginForm, setShowLoginForm] = useState<boolean>(true);
-
+  const router = useRouter();
   const [providers, setProviders] = useState<any>();
   useEffect(() => {
     // getProviders().then((providers) => setProviders(providers))
@@ -72,24 +74,30 @@ const SignIn = ({ error }: any) => {
           <>
             <LoginForm error={error} />
             {/* signin with social */}
-            <div className="flex flex-col items-center gap-4">
-              <button
-                className="button-effect h-14 w-[300px] rounded-xl bg-sky-600"
-                // onClick={(_) => signIn(providers?.facebook.id)}
-              >
-                {providers?.facebook.name}
-              </button>
-              <button
-                className="button-effect h-14 w-[300px] rounded-xl bg-pink-600"
-                // onClick={(_) => signIn(providers?.google.id)}
-              >
-                {providers?.google.name}
-              </button>
-            </div>
           </>
         ) : (
           <RegisterForm />
         )}
+        <div className="flex flex-col items-center gap-4">
+          <a
+            href="http://localhost:8000/auth/redirect/facebook"
+            className="button-effect flex h-14 w-[300px] items-center justify-center rounded-xl bg-sky-600 font-bold"
+          >
+            Facebook
+          </a>
+          <a
+            href="http://localhost:8000/auth/redirect/google"
+            className="button-effect flex h-14 w-[300px] items-center justify-center rounded-xl bg-pink-600 font-bold"
+          >
+            Gmail
+          </a>
+          <a
+            href="http://localhost:8000/auth/redirect/github"
+            className="button-effect flex h-14 w-[300px] items-center justify-center rounded-xl bg-black font-bold"
+          >
+            Github
+          </a>
+        </div>
       </div>
       {/* end main  */}
     </div>

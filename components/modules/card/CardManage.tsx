@@ -33,7 +33,13 @@ const CardManage = ({ user }: Props) => {
   const { data, isLoading } = useQuery({
     queryKey: [
       'cards',
-      { page, title: nameDebounce, filter_id: filter.id, status },
+      {
+        page,
+        title: nameDebounce,
+        filter_id: filter.id,
+        status,
+        user_id: user.role == 'USER' ? user.id : null,
+      },
     ],
     queryFn: cardApi.getCardList,
     keepPreviousData: true,
@@ -49,26 +55,29 @@ const CardManage = ({ user }: Props) => {
   const pageLength = data?.cards.last_page > 5 ? 5 : data?.cards.last_page;
   return (
     <>
-      <div className="mb-10 grid grid-cols-1 flex-wrap gap-5 lg:flex lg:justify-end">
-        <div className="w-full lg:w-[200px]">
-          <InputCard
-            name="filter"
-            placeholder="Search by title"
-            onChange={handleFilterByTitle}
-          ></InputCard>
+      <div className="flex items-center justify-between pl-4">
+        <span className="font-bold text-gray-400">Role: {user.role}</span>
+        <div className="mb-10 grid grid-cols-1 flex-wrap gap-5 lg:flex lg:justify-end">
+          <div className="w-full lg:w-[200px]">
+            <InputCard
+              name="filter"
+              placeholder="Search by title"
+              onChange={handleFilterByTitle}
+            ></InputCard>
+          </div>
+          <div className="w-full lg:w-[200px]">
+            <CardFilter value={filter} setValue={setFilter} />
+          </div>
+          <div className="w-full lg:w-[200px]">
+            <Status value={status} setValue={setStatus} />
+          </div>
+          <Button
+            onClick={resetSearch}
+            className="button-effect h-full w-full !bg-slate-900 p-2 lg:w-auto"
+          >
+            Clear filter
+          </Button>
         </div>
-        <div className="w-full lg:w-[200px]">
-          <CardFilter value={filter} setValue={setFilter} />
-        </div>
-        <div className="w-full lg:w-[200px]">
-          <Status value={status} setValue={setStatus} />
-        </div>
-        <Button
-          onClick={resetSearch}
-          className="button-effect h-full w-full !bg-slate-700 p-2 lg:w-auto"
-        >
-          Clear filter
-        </Button>
       </div>
       <div className="flex-1">
         <div className="relative h-full rounded-xl bg-black/70 px-4 py-3">
@@ -77,7 +86,7 @@ const CardManage = ({ user }: Props) => {
               <li className="col-span-2">Title</li>
               <li>Filter</li>
               <li>Status</li>
-              <li className="">CreatedAt</li>
+              <li className="">Updated at</li>
               <li className="col-span-2">Author</li>
               <li className="col-span-2">Preview</li>
               <li className="col-span-2 !text-center">Actions</li>
@@ -97,15 +106,16 @@ const CardManage = ({ user }: Props) => {
               ) : (
                 <>
                   {data?.cards.data.length === 0 && (
-                    <tr>
-                      <td colSpan={7}>No data</td>
-                    </tr>
+                    <div>
+                      <span>No data</span>
+                    </div>
                   )}
                   {data?.cards.data.length > 0 &&
                     data?.cards.data.map((card: any) => (
                       <CardRow
                         key={card.id}
                         card={card}
+                        role={user.role}
                         setIsShowAddNew={setIsShowAddNew}
                         setCardEditting={setCardEditting}
                       ></CardRow>
@@ -173,6 +183,7 @@ const CardManage = ({ user }: Props) => {
       <ButtonAddNew
         handleOnClick={() => {
           setIsShowAddNew(true);
+          setCardEditting(null);
         }}
       />
       <AnimatePresence>

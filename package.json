@@ -33,8 +33,11 @@
     "framer-motion": "8.0.2",
     "html-react-parser": "3.0.6",
     "javascript-time-ago": "2.5.9",
+    "js-beautify": "1.14.7",
     "next": "latest",
     "next-themes": "0.2.1",
+    "nextjs-progressbar": "0.0.16",
+    "nprogress": "0.2.0",
     "pretty": "2.0.0",
     "prismjs": "1.29.0",
     "react": "18.2.0",
@@ -43,10 +46,12 @@
     "react-redux": "8.0.5",
     "react-time-ago": "7.2.1",
     "react-toastify": "9.1.1",
-    "styled-components": "5.3.6"
+    "styled-components": "5.3.6",
+    "sweetalert2": "11.6.16"
   },
   "devDependencies": {
     "@types/cssbeautify": "0.3.2",
+    "@types/js-beautify": "1.13.3",
     "@types/node": "18.0.3",
     "@types/pretty": "2.0.1",
     "@types/react": "18.0.15",

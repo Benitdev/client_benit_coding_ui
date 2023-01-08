@@ -8,8 +8,6 @@ import { setCookie } from 'cookies-next';
 
 import authApi from 'api/authApi';
 
-// import { useAppDispatch } from 'hooks';
-// import { setIsLoading, setToggleLogin } from '../../redux/headerSlice'
 const LoginForm = ({ error }: any) => {
   const router = useRouter();
   // const useDispatch = useAppDispatch();
@@ -24,18 +22,18 @@ const LoginForm = ({ error }: any) => {
   const onSubmit = async (data: any) => {
     try {
       let res: any = await authApi.login(data);
-      localStorage.setItem('ACCESS_TOKEN', res.authorization.token);
-      setCookie('ACCESS_TOKEN', res.authorization.token);
+      // localStorage.setItem('ACCESS_TOKEN', res.authorization.token);
+      setCookie('ACCESS_TOKEN', res.access_token);
       toast.success('Đăng nhập thành công');
       router.push('/');
     } catch (e: any) {
-      if (e.data.message === 'Email does not exist') {
+      if (e.message === 'Email does not exist') {
         setEmailErr('Email không tồn tại!');
         setTimeout(() => {
           setEmailErr('');
         }, 3000);
-      } else if (e.data.message === 'Password incorrect') {
-        setPassErr('Mật khẩu không đúng!');
+      } else if (e.message === 'The user credentials were incorrect.') {
+        setPassErr('The user credentials were incorrect.');
         setTimeout(() => {
           setPassErr('');
         }, 3000);

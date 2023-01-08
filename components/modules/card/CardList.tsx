@@ -11,16 +11,12 @@ import { cardStatus } from 'constant/global-constant';
 import React, { useState } from 'react';
 import FilterMenu from '../filter/FilterMenu';
 
-const CardList = ({ filter }: any) => {
-  const [name, setName] = useState('');
+const CardList = ({ filter, title }: any) => {
   const [status, setStatus] = useState('');
-  const nameDebounce = useDebounce(name, 500);
+  // const nameDebounce = useDebounce(name, 500);
   const { data, isLoading, fetchNextPage, isFetchingNextPage, hasNextPage } =
     useInfiniteQuery({
-      queryKey: [
-        'cards',
-        { title: nameDebounce, filter_id: filter.id, status },
-      ],
+      queryKey: ['cards', { title: title, filter_id: filter.id, status }],
       queryFn: cardApi.getHomeCard,
       getNextPageParam: (lastPage, pages) => lastPage.cards.next_cursor,
       keepPreviousData: true,
@@ -59,7 +55,6 @@ const CardList = ({ filter }: any) => {
           ? 'Load More'
           : 'Nothing more to load'}
       </Button>
-      {/* <div className="fixed inset-0 bg-black"></div> */}
     </div>
   );
 };

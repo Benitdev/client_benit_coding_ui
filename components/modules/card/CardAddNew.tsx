@@ -1,21 +1,22 @@
 'use client';
 
-import { useInputChange, useToggle } from 'hooks';
+import { useInputChange } from 'hooks';
 
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import pretty from 'pretty';
+import cssBeautify from 'cssbeautify';
+import jsBeautify from 'js-beautify';
 
-import { cardStatus, userRole, userStatus } from 'constant/global-constant';
 import CardAction from './CardAction';
 import CardFilter from '@/components/common/dropdown/CardFilter';
 import FormGroup from '@/components/common/form/FormGroup';
-import Input from '@/components/common/input/Input';
 import InputCard from '@/components/common/input/InputCard';
 import Label from '@/components/common/label/Label';
 import Button from '@/components/common/button/Button';
 import CodeEditorBlock from '@/components/common/input/InputCode';
 import cardApi from 'api/cardApi';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose, faTable } from '@fortawesome/free-solid-svg-icons';
@@ -30,7 +31,7 @@ const CardAddNew = ({ setIsShowAddNew, user, card }: any) => {
     filter: {},
     htmlCode: '',
     cssCode: '',
-    jsCode: '//enter your javascript code ~~',
+    jsCode: '',
     author: '',
   });
 
@@ -50,9 +51,32 @@ const CardAddNew = ({ setIsShowAddNew, user, card }: any) => {
     }, [card]);
   }
   let newValues: any;
+  const handleFormatCode = () => {
+    setValues((prev) => ({
+      ...prev,
+      htmlCode: pretty(prev.htmlCode ?? '', {
+        ocd: true,
+      }),
+      cssCode: cssBeautify(prev.cssCode ?? '', {
+        indent: `  `,
+        autosemicolon: true,
+      }),
+      jsCode: jsBeautify(prev.jsCode ?? '', {}),
+    }));
+  };
   const checkValidity = () => {
-    newValues = { ...values };
-    console.log(newValues);
+    handleFormatCode();
+    newValues = {
+      ...values,
+      htmlCode: pretty(values.htmlCode ?? '', {
+        ocd: true,
+      }),
+      cssCode: cssBeautify(values.cssCode ?? '', {
+        indent: `  `,
+        autosemicolon: true,
+      }),
+      jsCode: jsBeautify(values.jsCode ?? '', {}),
+    };
     const isAllInputFilled = Object.keys(newValues).every((key) => {
       if (newValues.jsCode != '')
         return (
@@ -75,6 +99,7 @@ const CardAddNew = ({ setIsShowAddNew, user, card }: any) => {
     }
     return true;
   };
+
   const handleAddNewCard = async (e: any) => {
     e.preventDefault();
     /*  if (userInfo?.status === userStatus.INACTIVE) {
@@ -156,7 +181,7 @@ const CardAddNew = ({ setIsShowAddNew, user, card }: any) => {
     >
       <FontAwesomeIcon
         icon={faClose}
-        className="absolute top-4 right-4 h-8 w-8 cursor-pointer text-gray-300 hover:text-primary"
+        className="absolute top-4 right-4 z-10 h-8 w-8 cursor-pointer text-gray-300 hover:text-primary"
         onClick={() => {
           setIsCodingLayout(false);
         }}
@@ -168,6 +193,7 @@ const CardAddNew = ({ setIsShowAddNew, user, card }: any) => {
           code={values.htmlCode ?? ''}
           language="html"
           height="100%"
+          placeholder="Enter your html code"
           showTitle
         />
         <CodeEditorBlock
@@ -176,14 +202,16 @@ const CardAddNew = ({ setIsShowAddNew, user, card }: any) => {
           language="css"
           name="cssCode"
           height="100%"
+          placeholder="Enter your css code"
           showTitle
         />
         <CodeEditorBlock
           name="jsCode"
           setValue={setValues}
-          code={values.jsCode ?? '//enter your javascript code ~~'}
+          code={values.jsCode ?? ''}
           language="javascript"
           height="100%"
+          placeholder="Enter your javascript code"
           showTitle
         />
       </div>
@@ -244,24 +272,27 @@ const CardAddNew = ({ setIsShowAddNew, user, card }: any) => {
               setValue={setValues}
               code={values.htmlCode ?? ''}
               language="html"
+              placeholder="Enter your html code"
             ></CodeEditorBlock>
           </FormGroup>
           <FormGroup>
             <Label className="text-cyan-500">CSS</Label>
             <CodeEditorBlock
+              name="cssCode"
               setValue={setValues}
               code={values.cssCode ?? ''}
               language="css"
-              name="cssCode"
+              placeholder="Enter your css code"
             ></CodeEditorBlock>
           </FormGroup>
           <FormGroup>
             <Label className="text-yellow-500">Javascript</Label>
             <CodeEditorBlock
-              setValue={setValues}
-              code={values.jsCode ?? '//enter your javascript code ~~'}
-              language="javascript"
               name="jsCode"
+              setValue={setValues}
+              code={values.jsCode ?? ''}
+              language="javascript"
+              placeholder="Enter your javascript code"
             ></CodeEditorBlock>
           </FormGroup>
           <div className="flex items-center gap-x-5">
@@ -281,14 +312,14 @@ const CardAddNew = ({ setIsShowAddNew, user, card }: any) => {
               <Button
                 isLoading={loading}
                 type="submit"
-                className="button-effect bg-gradient-primary w-[200px]"
+                className="button-effect bg-gradient-primary mx-auto w-[200px]"
               >
                 Add new card
               </Button>
             ) : (
               <Button
                 isLoading={loading}
-                className="button-effect bg-gradient-primary w-[200px]"
+                className="button-effect bg-gradient-primary mx-auto w-[200px]"
                 onClick={handleUpdateCard}
               >
                 Update card

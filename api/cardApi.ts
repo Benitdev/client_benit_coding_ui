@@ -32,6 +32,8 @@ const cardApi = {
     const [_, id] = queryKey;
     return axiosClient.get(`/cards/${id}`) as any;
   },
+  deleteCardById: (id: string) =>
+    axiosClient.delete('/cards/delete-card/' + id),
   getFilter: () => axiosClient.get('/filter') as any,
 };
 

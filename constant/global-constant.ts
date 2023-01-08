@@ -37,8 +37,9 @@ export const cardStatus = {
   REJECTED: 'rejected',
 };
 export const filterStatus = {
-  APPROVED: true,
-  REJECTED: false,
+  APPROVED: 'approved',
+  PENDING: 'pending',
+  REJECTED: 'rejected',
 };
 export const userStatus = {
   ACTIVE: 'ACTIVE',

@@ -84,17 +84,24 @@
     @apply w-full;
   }
   .table ul {
-    @apply grid grid-cols-11;
+    @apply mb-3 grid grid-cols-11;
   }
   .table li,
   .row-item > div {
     @apply flex items-center justify-center whitespace-nowrap p-3;
   }
   .table li {
-    @apply mb-3 border-b border-slate-400/30 text-xl font-extrabold text-slate-300;
+    @apply border-b border-slate-400/30 text-xl font-extrabold text-slate-300;
   }
-  .table tr {
-    @apply grid grid-cols-11 rounded-xl bg-gray-900/70;
+  .table tbody tr {
+    @apply overflow-hidden rounded-xl bg-gray-900/70;
+  }
+  .table th,
+  .table td {
+    @apply whitespace-nowrap p-3 text-left;
+  }
+  .swal2-popup {
+    @apply !bg-slate-900;
   }
 }
 

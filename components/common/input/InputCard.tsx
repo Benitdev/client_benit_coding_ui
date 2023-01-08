@@ -1,7 +1,7 @@
 import clsx from 'clsx';
-import { useState } from 'react';
+import { forwardRef, useState } from 'react';
 
-const InputCard = (props: any) => {
+const InputCard = forwardRef((props: any, ref) => {
   const { type = 'text', className = '', ...rest } = props;
   const [inputType, setInputType] = useState(type);
   function togglePassword() {
@@ -10,6 +10,7 @@ const InputCard = (props: any) => {
   return (
     <div className="relative w-full">
       <input
+        ref={ref}
         autoComplete="off"
         type={inputType}
         className={clsx(
@@ -17,7 +18,7 @@ const InputCard = (props: any) => {
           className,
         )}
         {...rest}
-      ></input>
+      />
       {type === 'password' && (
         <>
           {inputType === 'password' ? (
@@ -63,6 +64,6 @@ const InputCard = (props: any) => {
       )}
     </div>
   );
-};
+});
 
 export default InputCard;

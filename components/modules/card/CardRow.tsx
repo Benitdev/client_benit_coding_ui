@@ -2,6 +2,7 @@
 
 import ReactTimeAgo from 'react-time-ago';
 import TimeAgo from 'javascript-time-ago';
+import Swal from 'sweetalert2';
 
 import en from 'javascript-time-ago/locale/en.json';
 import ru from 'javascript-time-ago/locale/ru.json';
@@ -12,14 +13,19 @@ import IconQuestion from '@/components/common/icons/IconQuestion';
 import LabelStatus from '@/components/common/label/LabelStatus';
 import { cardStatus, userRole } from 'constant/global-constant';
 import useAuth from 'hooks/useAuth';
-import Link from 'next/link';
 import CardPreview from './CardPreview';
+import cardApi from 'api/cardApi';
+import { toast } from 'react-toastify';
+import { useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import ModalReject from '@/components/common/modal/ModalReject';
 
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
 
-const CardRow = ({ card, setIsShowAddNew, setCardEditting }: any) => {
-  const user: any = {};
+const CardRow = ({ card, setIsShowAddNew, setCardEditting, role }: any) => {
+  const queryClient = useQueryClient();
+  const [toggleReasonModal, setToggleReasonModal] = useState<boolean>(false);
   const renderStatus = (status: string) => {
     switch (status) {
       case cardStatus.APPROVED:
@@ -30,9 +36,26 @@ const CardRow = ({ card, setIsShowAddNew, setCardEditting }: any) => {
         return <LabelStatus className="bg-red-500">Rejected</LabelStatus>;
     }
   };
-  const handleDeleteCard = async (id: number) => {
-    if (user?.role !== userRole.ADMIN) {
-      return;
+  const handleDeleteCard = async (id: string) => {
+    try {
+      Swal.fire({
+        title: 'Are you sure?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        background: '#0f182c',
+        color: '#fff',
+        iconColor: '#d64930',
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await cardApi.deleteCardById(id);
+          queryClient.invalidateQueries({ queryKey: ['cards'] });
+          toast.success('Delete card successfully');
+        }
+      });
+    } catch (e) {
+      console.log(e);
+      toast.error('Delete card failed!!!');
     }
   };
   /*  const { setIsShowReasonModal, setReason } = globalStore(
@@ -77,7 +100,7 @@ const CardRow = ({ card, setIsShowAddNew, setCardEditting }: any) => {
         <div className="flex items-center gap-x-5">
           <ButtonAction
             className="hover:border-yellow-400 hover:text-yellow-400"
-            // onClick={() => handleShowReason(card.reason || '')}
+            onClick={() => setToggleReasonModal(true)}
           >
             <IconQuestion />
           </ButtonAction>
@@ -91,16 +114,23 @@ const CardRow = ({ card, setIsShowAddNew, setCardEditting }: any) => {
             <IconEdit></IconEdit>
           </ButtonAction>
 
-          {user?.role !== userRole.ADMIN && (
+          {role === userRole.ADMIN && (
             <ButtonAction
               className="hover:border-red-500 hover:text-red-500"
-              //   onClick={() => handleDeleteCard(card.id)}
+              onClick={() => handleDeleteCard(card.id)}
             >
               <IconTrash></IconTrash>
             </ButtonAction>
           )}
         </div>
       </div>
+      {toggleReasonModal && (
+        <ModalReject
+          setToggleReasonModal={setToggleReasonModal}
+          cardId={card.id}
+          status={card.status}
+        />
+      )}
     </div>
   );
 };

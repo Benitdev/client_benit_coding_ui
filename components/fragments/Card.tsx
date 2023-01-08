@@ -1,22 +1,13 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
-import parse from 'html-react-parser';
+import { useState } from 'react';
 import copyToClipBoard from '../../utils/copyToClipboard';
 import pretty from 'pretty';
 import cssbeautify from 'cssbeautify';
 import { IconEye, IconHeart } from '@/components/common/icons';
-import {
-  setIsShowCode,
-  setCssCode,
-  setHtmlCode,
-} from 'redux/slices/modalSlice';
-import { useAppDispatch } from 'hooks';
+
 import CardPreview from '../modules/card/CardPreview';
-const CardStyles = styled.div`
-  ${(props: any) => props.style}
-`;
+import ModalViewCode from '../common/modal/ModalViewCode';
 
 type Props = {
   title: string;
@@ -36,29 +27,8 @@ const Card = (props: Props) => {
     author = null,
     preview = false,
   } = props;
-  const dispatch = useAppDispatch();
-  /*   const [htmlSourceCode, setHtmlSourceCode] = useState(htmlCode);
-  const [cssSourceCode, setCssSourceCode] = useState(cssCode);
-  const [jsSourceCode, setJsSourceCode] = useState(jsCode);
+  const [isShowCode, setIsShowCode] = useState(false);
 
-    useEffect(() => {
-    setHtmlSourceCode(htmlCode);
-    setCssSourceCode(cssCode);
-    setJsSourceCode(jsCode);
-  }, [htmlCode, cssCode, preview]);
- */
-  const handleViewCode = () => {
-    dispatch(setIsShowCode(true));
-    dispatch(setHtmlCode(pretty(htmlCode, { ocd: true })));
-    dispatch(
-      setCssCode(
-        cssbeautify(cssCode, {
-          indent: `  `,
-          autosemicolon: true,
-        }),
-      ),
-    );
-  };
   return (
     <>
       <div className="card relative flex h-[400px] flex-col rounded border border-slate-800 p-5 transition-all hover:border-slate-600">
@@ -75,7 +45,7 @@ const Card = (props: Props) => {
           </h4>
           {!preview && (
             <div className="flex items-center gap-x-2">
-              <ButtonAction onClick={handleViewCode}>
+              <ButtonAction onClick={() => setIsShowCode(true)}>
                 <IconEye></IconEye>
               </ButtonAction>
             </div>
@@ -94,10 +64,23 @@ const Card = (props: Props) => {
               aria-label="button-combination"
             >
               <ButtonCopy
+                type="javascript"
+                onClick={() =>
+                  copyToClipBoard(
+                    cssbeautify(cssCode ?? '', {
+                      indent: `  `,
+                      autosemicolon: true,
+                    }),
+                  )
+                }
+              >
+                Javascript
+              </ButtonCopy>
+              <ButtonCopy
                 type="css"
                 onClick={() =>
                   copyToClipBoard(
-                    cssbeautify(cssCode, {
+                    cssbeautify(cssCode ?? '', {
                       indent: `  `,
                       autosemicolon: true,
                     }),
@@ -108,7 +91,13 @@ const Card = (props: Props) => {
               </ButtonCopy>
               <ButtonCopy
                 type="html"
-                onClick={() => copyToClipBoard(pretty(htmlCode, { ocd: true }))}
+                onClick={() =>
+                  copyToClipBoard(
+                    pretty(htmlCode ?? '', {
+                      ocd: true,
+                    }),
+                  )
+                }
               >
                 HTML
               </ButtonCopy>
@@ -116,6 +105,19 @@ const Card = (props: Props) => {
           )}
         </div>
       </div>
+      {isShowCode && (
+        <ModalViewCode
+          htmlCode={pretty(htmlCode ?? '', {
+            ocd: true,
+          })}
+          cssCode={cssbeautify(cssCode ?? '', {
+            indent: `  `,
+            autosemicolon: true,
+          })}
+          jsCode={jsCode}
+          setIsShowCode={setIsShowCode}
+        />
+      )}
     </>
   );
 };
@@ -133,7 +135,11 @@ function ButtonAction({ children, onClick }: any) {
 
 function ButtonCopy({ children, onClick = () => {}, type = 'html' }: any) {
   let bgClassName =
-    type === 'html' ? 'hover:bg-blue-500' : 'hover:bg-orange-500';
+    type === 'html'
+      ? 'hover:bg-pink-500'
+      : type === 'css'
+      ? 'hover:bg-cyan-500'
+      : 'hover:bg-yellow-700';
 
   return (
     <button

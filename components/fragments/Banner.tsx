@@ -19,7 +19,7 @@ const Banner = (props: Props) => {
       </h1>
       <div className="mb-10 flex flex-col justify-center gap-5 sm:flex-row sm:items-center">
         <a
-          href="https://github.com/evondev/coding-ui"
+          href="https://github.com/Benitdev/client_benit_coding_ui"
           target="_blank"
           rel="noreferrer"
           className="button-effect inline-flex h-[60px] w-full items-center justify-center gap-x-3 rounded-lg bg-slate-800 px-8 py-4 font-sans font-semibold tracking-wide text-white sm:w-[230px]"
@@ -28,7 +28,7 @@ const Banner = (props: Props) => {
           View on Github
         </a>
         <a
-          href="https://fb.com/tuan.trananh.0509"
+          href="https://www.facebook.com/neihtben"
           target="_blank"
           className="bg-gradient-primary button-effect inline-flex h-[60px] w-full items-center justify-center gap-x-3 rounded-lg px-8 py-4 font-sans font-semibold tracking-wide text-white sm:w-[230px]"
           rel="noreferrer"
@@ -38,10 +38,10 @@ const Banner = (props: Props) => {
         </a>
       </div>
       <div className="flex items-center justify-center gap-x-5">
-        <SocialIcon href="https://www.facebook.com/evondevblog">
+        <SocialIcon href="https://www.facebook.com/neihtben">
           <IconFacebook />
         </SocialIcon>
-        <SocialIcon href="https://www.youtube.com/c/evondevfrontend">
+        <SocialIcon href="https://www.youtube.com/@thienphan9714">
           <svg
             width="32"
             height="32"
@@ -58,10 +58,10 @@ const Banner = (props: Props) => {
             />
           </svg>
         </SocialIcon>
-        <SocialIcon href="https://www.tiktok.com/@evon.dev">
+        <SocialIcon href="">
           <IconTiktok />
         </SocialIcon>
-        <SocialIcon href="https://evondev.com">
+        <SocialIcon href="">
           <IconWebsite />
         </SocialIcon>
       </div>
