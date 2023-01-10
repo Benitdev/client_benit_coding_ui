@@ -2,7 +2,7 @@ import React from 'react';
 
 const ModalClose = ({ onClick = () => {} }) => {
   return (
-    <div className="sticky top-0 z-10">
+    <div className="absolute top-1/2 right-2 -translate-y-1/2">
       <div
         aria-label="modal-close"
         className="ml-auto flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-slate-900"

@@ -8,6 +8,7 @@ import { IconEye, IconHeart } from '@/components/common/icons';
 
 import CardPreview from '../modules/card/CardPreview';
 import ModalViewCode from '../common/modal/ModalViewCode';
+import jsBeautify from 'js-beautify';
 
 type Props = {
   title: string;
@@ -31,7 +32,7 @@ const Card = (props: Props) => {
 
   return (
     <>
-      <div className="card relative flex h-[400px] flex-col rounded border border-slate-800 p-5 transition-all hover:border-slate-600">
+      <div className="card relative flex h-[400px] flex-col rounded border border-slate-800 p-5 drop-shadow-2xl transition-all hover:border-slate-600">
         <div className="flex items-center justify-between">
           <h4 className="relative z-10 flex items-center gap-x-2 text-sm font-normal text-slate-500">
             {author && (
@@ -65,14 +66,7 @@ const Card = (props: Props) => {
             >
               <ButtonCopy
                 type="javascript"
-                onClick={() =>
-                  copyToClipBoard(
-                    cssbeautify(cssCode ?? '', {
-                      indent: `  `,
-                      autosemicolon: true,
-                    }),
-                  )
-                }
+                onClick={() => copyToClipBoard(jsBeautify(jsCode ?? '', {}))}
               >
                 Javascript
               </ButtonCopy>
@@ -133,7 +127,11 @@ function ButtonAction({ children, onClick }: any) {
   );
 }
 
-function ButtonCopy({ children, onClick = () => {}, type = 'html' }: any) {
+export function ButtonCopy({
+  children,
+  onClick = () => {},
+  type = 'html',
+}: any) {
   let bgClassName =
     type === 'html'
       ? 'hover:bg-pink-500'

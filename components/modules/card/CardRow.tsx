@@ -84,7 +84,10 @@ const CardRow = ({ card, setIsShowAddNew, setCardEditting, role }: any) => {
       </div>
       <div className="col-span-2">
         <div className="flex flex-col gap-1">
-          <p>{card.userFullname || 'Admin'}</p>
+          <p>
+            {card.credit}{' '}
+            <small className="capitalize text-slate-400">({role})</small>
+          </p>
           <p className="text-sm text-slate-500">{card.userEmailAddress}</p>
         </div>
       </div>

@@ -14,7 +14,7 @@ const Banner = (props: Props) => {
       <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center border-4 border-purple-500 bg-opacity-10">
         <IconPointer />
       </div>
-      <h1 className="mx-auto mb-10 max-w-xl text-center text-3xl font-bold leading-snug text-white lg:text-4xl lg:leading-relaxed">
+      <h1 className="bg-gradient-secondary mx-auto mb-10 max-w-xl bg-clip-text text-center text-3xl font-bold leading-snug text-transparent lg:text-4xl lg:leading-relaxed ">
         Get your free UI components with just few click
       </h1>
       <div className="mb-10 flex flex-col justify-center gap-5 sm:flex-row sm:items-center">

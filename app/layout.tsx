@@ -13,7 +13,6 @@ export default function RootLayout({
 }) {
   return (
     <html className="dark">
-      <head />
       <body className="bg-white text-slate-900 antialiased dark:bg-black dark:text-slate-100">
         <ProgressBarWrapper />
         <ReactQueryWrapper>
@@ -25,7 +24,7 @@ export default function RootLayout({
         <div className="bg-grid fixed inset-0 -z-10"></div>
         <ToastContainerWrapper />
 
-        {/*   <div id="fb-root"></div>
+        {/*      <div id="fb-root"></div>
         <div id="fb-customer-chat" className="fb-customerchat"></div>
         <Script src="/messenger.js" /> */}
       </body>

@@ -32,7 +32,7 @@ const CardAddNew = ({ setIsShowAddNew, user, card }: any) => {
     htmlCode: '',
     cssCode: '',
     jsCode: '',
-    author: '',
+    author: user.name,
   });
 
   if (card) {
@@ -117,6 +117,7 @@ const CardAddNew = ({ setIsShowAddNew, user, card }: any) => {
         css_code: newValues.cssCode,
         js_code: newValues.jsCode,
         credit: newValues.author,
+        status: user.role == 'USER' ? 'pending' : 'approved',
       });
       toast.success('Thêm Card Thành Công!');
       queryClient.invalidateQueries({ queryKey: ['cards'] });
@@ -152,6 +153,7 @@ const CardAddNew = ({ setIsShowAddNew, user, card }: any) => {
           css_code: newValues.cssCode,
           js_code: newValues.jsCode,
           credit: newValues.author,
+          status: user.role == 'USER' ? 'pending' : card.status,
         },
         card.id,
       );

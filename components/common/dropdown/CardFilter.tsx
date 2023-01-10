@@ -13,6 +13,7 @@ const CardFilter = ({ value, setValue }: any) => {
     queryKey: ['filter'],
     queryFn: cardApi.getFilter,
   });
+  console.log(value.filter_name);
   value.filter_name =
     value.filter_name === undefined ? 'Select Filter' : value.filter_name;
   return (
@@ -30,7 +31,7 @@ const CardFilter = ({ value, setValue }: any) => {
             {...attrs}
           >
             {isLoading && (
-              <div className="border-white-500 h-10 w-10 animate-spin rounded-full border-4 border-t-transparent"></div>
+              <div className="border-white-500 mx-auto h-10 w-10 animate-spin rounded-full border-4 border-t-transparent"></div>
             )}
             {data?.filterList.map((item: any) => (
               <div
@@ -43,7 +44,7 @@ const CardFilter = ({ value, setValue }: any) => {
                 )}
                 onClick={() => {
                   setVisibleFilter(false);
-                  setValue(item);
+                  setValue(value.filter_name == 'Select Filter' ? item : {});
                 }}
               >
                 {item.filter_name}
