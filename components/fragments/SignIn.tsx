@@ -77,12 +77,14 @@ const SignIn = ({ error }: any) => {
                 className="button-effect h-14 w-[300px] rounded-xl bg-sky-600"
                 // onClick={(_) => signIn(providers?.facebook.id)}
               >
+                
                 {providers?.facebook.name}
               </button>
               <button
                 className="button-effect h-14 w-[300px] rounded-xl bg-pink-600"
                 // onClick={(_) => signIn(providers?.google.id)}
               >
+                
                 {providers?.google.name}
               </button>
             </div>
