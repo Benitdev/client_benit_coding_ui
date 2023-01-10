@@ -30,7 +30,7 @@ const LoginForm = ({ error }: any) => {
       router.push('/');
     } catch (e: any) {
       if (e.data.message === 'Email does not exist') {
-        setEmailErr('Email không tồn tại!');
+        setEmailErr('Email không tồn tại!');//âssas
         setTimeout(() => {
           setEmailErr('');
         }, 3000);
